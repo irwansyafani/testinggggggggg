@@ -1,0 +1,123 @@
+
+        <input className="m-1" placeholder="Event's name" />
+        <input className="m-1" placeholder="Event's description" />
+        <input className="m-1" placeholder="Event's venue" />
+        <br />
+        <button
+          onClick={() => {
+            setTime([...time, { name: `Time Event #${time.length + 1}` }]);
+          }}
+        >
+          add time
+        </button>
+        {time.map((t: any, i: any) => {
+          return (
+            <div key={i} className="d-flex my-1">
+              <Accordion title={t.name} className="w-100">
+                <input className="m-1" placeholder="name" />
+                <input
+                  className="m-1"
+                  type="datetime-local"
+                  placeholder="date"
+                />
+              </Accordion>
+              <button
+                onClick={() => {
+                  const filtered = time.filter((_: any, j: any) => i !== j);
+                  setTime(filtered);
+                }}
+              >
+                delete
+              </button>
+            </div>
+          );
+        })}
+        <button
+          onClick={() => {
+            setCategory([
+              ...category,
+              { name: `Category Ticket #${category.length + 1}` },
+            ]);
+          }}
+        >
+          add category
+        </button>
+        {category.map((c: any, i: any) => {
+          return (
+            <div key={i} className="d-flex my-1">
+              <Accordion title={c.name} className="w-100">
+                <input className="m-1" placeholder="name" />
+                <input className="m-1" placeholder="is transferable (y/n)" />
+                <input
+                  className="m-1"
+                  placeholder="max quantity"
+                  type="number"
+                  min={0}
+                />
+              </Accordion>
+              <button
+                onClick={() => {
+                  const filtered = category.filter((_: any, j: any) => i !== j);
+                  setCategory(filtered);
+                }}
+              >
+                delete
+              </button>
+            </div>
+          );
+        })}
+        <button
+          onClick={() => {
+            setSale([...sale, { name: `Sale Time #${sale.length + 1}` }]);
+          }}
+        >
+          add sale
+        </button>
+        {sale.map((s: any, i: any) => {
+          return (
+            <div key={i} className="d-flex my-1">
+              <Accordion title={s.name} className="w-100">
+                <input className="m-1" placeholder="name" />
+                <input
+                  className="m-1"
+                  placeholder="date"
+                  type="datetime-local"
+                />
+                <Accordion title="Tickets" className="w-100">
+                  {category.map((c: any, j: any) => {
+                    return (
+                      <div>
+                        <input
+                          className="m-1"
+                          placeholder="name"
+                          value={c.name}
+                          contentEditable={false}
+                        />
+                        <input
+                          className="m-1"
+                          placeholder="max qty sale"
+                          type="number"
+                          min={0}
+                        />
+                        <input
+                          className="m-1"
+                          placeholder="price"
+                          type="number"
+                          min={0}
+                        />
+                      </div>
+                    );
+                  })}
+                </Accordion>
+              </Accordion>
+              <button
+                onClick={() => {
+                  const filtered = sale.filter((_: any, j: any) => i !== j);
+                  setSale(filtered);
+                }}
+              >
+                delete
+              </button>
+            </div>
+          );
+        })}

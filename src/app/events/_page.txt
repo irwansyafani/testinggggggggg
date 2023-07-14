@@ -1,0 +1,196 @@
+"use client";
+import { Accordion } from "@/components/accordion";
+import Link from "next/link";
+import { useState } from "react";
+
+export default function Home() {
+  const [events, setEvents]: any = useState([]);
+
+  return (
+    <main>
+      <nav className="d-flex align-items-center gap-2">
+        <h1 className="mb-0">QP</h1>
+        <Link href="/">Dashboard</Link>
+        <Link href="/events">Create Event</Link>
+      </nav>
+      <div className="container py-4">
+        <button
+          className="mb-4"
+          onClick={() => {
+            setEvents([
+              ...events,
+              { name: `Event #${events.length + 1}`, methods: [] },
+            ]);
+          }}
+        >
+          Add New Event
+        </button>
+        {events.map((item: any, i: number) => {
+          return (
+            <div key={i} className="d-flex gap-1">
+              <Accordion title={item.name} className="w-100">
+                <input type="text" placeholder="Event Name" />
+                <br />
+                <input type="text" placeholder="Event Description" />
+                <br />
+                <input type="datetime-local" placeholder="Event Date" />
+                <br />
+                <input type="datetime-local" placeholder="Event Date" />
+                <br />
+                <input type="file" placeholder="Event Photo" />
+                <br />
+                <input type="file" placeholder="Event Background Photo" />
+                <br />
+                <br />
+                <br />
+                <button
+                  onClick={() => {
+                    const cloned = [...events];
+                    cloned[i].methods = [
+                      ...cloned[i].methods,
+                      {
+                        name: `Selling Method #${
+                          events[i].methods?.length + 1
+                        }`,
+                        tickets: [],
+                      },
+                    ];
+                    setEvents(cloned);
+                  }}
+                >
+                  Add New Method
+                </button>
+                <br />
+                <br />
+                {events[i] &&
+                  events[i]?.methods?.map((method: any, j: number) => {
+                    return (
+                      <div key={j} className="d-flex gap-1">
+                        <Accordion title={method.name} className="w-100">
+                          <br />
+                          <input type="text" placeholder="Method Name" />
+                          <br />
+                          <input
+                            type="datetime-local"
+                            placeholder="Method Date"
+                          />
+                          <br />
+                          <input
+                            type="datetime-local"
+                            placeholder="Method Date"
+                          />
+                          <br />
+                          <br />
+                          <button
+                            onClick={() => {
+                              const cloned = [...events];
+                              cloned[i].methods[j].tickets = [
+                                ...cloned[i].methods[j].tickets,
+                                {
+                                  name: `Ticket #${
+                                    events[i].methods[j].tickets?.length + 1
+                                  }`,
+                                },
+                              ];
+
+                              setEvents(cloned);
+                            }}
+                          >
+                            Add New Ticket
+                          </button>
+                          <br />
+                          <br />
+                          {events[i]?.methods[j]?.tickets &&
+                            events[i]?.methods[j]?.tickets.map(
+                              (ticket: any, m: number) => {
+                                return (
+                                  <div key={m} className="d-flex gap-1">
+                                    <Accordion
+                                      title={ticket.name}
+                                      className="w-100"
+                                    >
+                                      <br />
+                                      <input
+                                        type="text"
+                                        placeholder="Ticket Name"
+                                      />
+                                      <br />
+                                      <input
+                                        type="number"
+                                        placeholder="Ticket Quantity"
+                                      />
+                                      <br />
+                                      <input
+                                        type="number"
+                                        prefix="IDR"
+                                        placeholder="Ticket Price"
+                                      />
+                                      <br />
+                                      <input
+                                        type="number"
+                                        placeholder="Max Per Wallet"
+                                      />
+                                      <br />
+                                      <input
+                                        type="number"
+                                        prefix="IDR"
+                                        placeholder="Max Resale Price"
+                                      />
+                                      <br />
+                                      <input type="checkbox" /> Is Transferable
+                                    </Accordion>
+                                    <button
+                                      onClick={() => {
+                                        const cloned = [...events];
+                                        const filtered = cloned[i].methods[
+                                          j
+                                        ].tickets.filter(
+                                          (__: any, n: number) => m !== n
+                                        );
+                                        cloned[i].methods[j].tickets = filtered;
+                                        setEvents(cloned);
+                                      }}
+                                    >
+                                      Delete Ticket
+                                    </button>
+                                  </div>
+                                );
+                              }
+                            )}
+                        </Accordion>
+                        <button
+                          onClick={() => {
+                            const cloned = [...events];
+                            const filtered = cloned[i].methods.filter(
+                              (__: any, l: number) => j !== l
+                            );
+                            cloned[i].methods = filtered;
+                            setEvents(cloned);
+                          }}
+                        >
+                          Delete Method
+                        </button>
+                      </div>
+                    );
+                  })}
+              </Accordion>
+              <div>
+                <button
+                  onClick={() => {
+                    const filtered = events.filter(
+                      (_: any, k: number) => k !== i
+                    );
+                    setEvents(filtered);
+                  }}
+                >
+                  Delete Event
+                </button>
+              </div>
+            </div>
+          );
+        })}
+        {events.length > 0 && <button className="mt-2">Submit</button>}
+      </div>
+    </main>
+  );
+}
