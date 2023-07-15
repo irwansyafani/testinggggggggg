@@ -54,7 +54,11 @@ export const useContract = () => {
         console.log(error);
       }
     } else {
-      connectWallet();
+      toast.promise(connectWallet(), {
+        error: "Unable to connect to your account",
+        loading: "Connecting Account",
+        success: "Account connected, now you can do continue",
+      });
     }
   };
 
