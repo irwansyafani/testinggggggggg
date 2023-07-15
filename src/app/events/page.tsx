@@ -246,12 +246,12 @@ export default function Home() {
       />
       <nav className="container gap-2">
         <Image src="/logo.png" width={125} height={50} alt="logo" />
-        <div className="d-flex gap-2">
+        {/* <div className="d-flex gap-2">
           <Link href="/">Dashboard</Link>
           <Link href="/events" className="selected">
             Events
           </Link>
-        </div>
+        </div> */}
       </nav>
       <div className="container py-4">
         <div className="stepper">

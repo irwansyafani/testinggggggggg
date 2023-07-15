@@ -47,12 +47,12 @@ export default function EventDetails() {
       <div className="content">
         <nav className="container gap-2">
           <Image src="/logo.png" width={125} height={50} alt="logo" />
-          <div className="d-flex gap-2">
+          {/* <div className="d-flex gap-2">
             <Link href="/" className="selected">
               Dashboard
             </Link>
             <Link href="/events">Events</Link>
-          </div>
+          </div> */}
         </nav>
         <div className="d-flex justify-content-center">
           <div className="container px-md-5 text-white d-flex flex-column justify-content-center align-items-center text-center">

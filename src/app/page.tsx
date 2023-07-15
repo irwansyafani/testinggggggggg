@@ -5,13 +5,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<{}[]>([]);
   const { getContractDetails } = useContract();
 
   useEffect(() => {
     getContractDetails()
       .then((res) => {
-        setData([{ ...res }]);
+        if (res) {
+          setData([{ ...res }]);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -22,16 +24,17 @@ export default function Home() {
     <main>
       <nav className="container gap-2">
         <Image src="/logo.png" width={125} height={50} alt="logo" />
-        <div className="d-flex gap-2">
+        {/* <div className="d-flex gap-2">
           <Link href="/" className="selected">
             Dashboard
           </Link>
           <Link href="/events">Events</Link>
-        </div>
+        </div> */}
       </nav>
       <div className="event-wrapper container py-4">
         <div className="row">
-          {data.map((item: any, i: any) => {
+          {!data.length && <p className="text-white">There is no event yet</p>}
+          {data?.map((item: any, i: any) => {
             return (
               <Link
                 key={i}
