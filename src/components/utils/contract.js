@@ -100,6 +100,7 @@ export const useContract = () => {
         success: "Purchased Successfully",
       });
     } catch (error) {
+      toast.error("Unable to proceed, please check console");
       console.log(error);
     }
   };
