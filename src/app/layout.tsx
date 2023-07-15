@@ -1,10 +1,11 @@
 "use client";
-import { Web3ReactProvider } from '@web3-react/core'
-import './globals.scss'
-import { Inter } from 'next/font/google'
-import { Web3Provider } from '@ethersproject/providers'
+import { Web3ReactProvider } from "@web3-react/core";
+import "./globals.scss";
+import { Inter } from "next/font/google";
+import { Web3Provider } from "@ethersproject/providers";
+import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata = {
 //   title: 'QoinPay - Ticketing System',
@@ -18,13 +19,16 @@ function getLibrary(provider: any) {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <Web3ReactProvider getLibrary={getLibrary}>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <Toaster />
+          {children}
+        </body>
       </Web3ReactProvider>
     </html>
-  )
+  );
 }

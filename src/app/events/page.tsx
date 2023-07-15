@@ -245,7 +245,9 @@ export default function Home() {
         className="ellipse"
       />
       <nav className="container gap-2">
-        <Image src="/logo.png" width={125} height={50} alt="logo" />
+        <Link href="/">
+          <Image src="/logo.png" width={125} height={50} alt="logo" />
+        </Link>
         {/* <div className="d-flex gap-2">
           <Link href="/">Dashboard</Link>
           <Link href="/events" className="selected">

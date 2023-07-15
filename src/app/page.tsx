@@ -23,7 +23,9 @@ export default function Home() {
   return (
     <main>
       <nav className="container gap-2">
-        <Image src="/logo.png" width={125} height={50} alt="logo" />
+        <Link href="/">
+          <Image src="/logo.png" width={125} height={50} alt="logo" />
+        </Link>
         {/* <div className="d-flex gap-2">
           <Link href="/" className="selected">
             Dashboard
