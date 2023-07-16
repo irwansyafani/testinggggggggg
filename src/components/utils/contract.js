@@ -74,26 +74,31 @@ export const useContract = () => {
         date:
           Number((await contract.dailyEvents(0)).toString().split(",")[0]) *
           1000,
-        // details: String(await contract.getAllEventDetails()),
-        // tickets: String(await contract.getTicketDetails()),
+        details: String(await contract.getAllEventDetails()),
         days: Number(String(await contract.totalDays())),
+        sales: JSON.parse(JSON.stringify(await contract.getSaleDetails())).map(
+          (item) =>
+            typeof item === "object"
+              ? item.length
+                ? item.map((cItem) =>
+                    cItem?.hex ? parseInt(cItem.hex, 16) : cItem
+                  )
+                : [parseInt(item.hex, 16)]
+              : [item]
+        ),
       };
     } catch (error) {
+      toast.error("Unable to proceed, please check your console");
       console.log(error);
     }
   };
 
-  const buyTicket = async (vipQty = 0, regulerQty = 0) => {
+  const buyTicket = async (tickets, qtys) => {
     try {
       const address = localStorage.getItem("contract");
       const signer = library["getSigner"](account);
       const contract = new Contract(address, abi, signer);
-      const tx = await contract.buyTicket(
-        0,
-        ["VIP", "Regular"],
-        [vipQty, regulerQty],
-        0
-      );
+      const tx = await contract.buyTicket(0, tickets, qtys, 0);
       toast.promise(tx.wait(), {
         error: "Unable to purchase a ticket",
         loading: "Buy is in process",

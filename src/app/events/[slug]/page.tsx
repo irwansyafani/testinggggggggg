@@ -1,4 +1,5 @@
 "use client";
+import { Accordion } from "@/components/accordion";
 import { useContract } from "@/components/utils/contract";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +14,7 @@ const Input = ({
   className = "",
   style,
   min,
+  onChange = () => null,
 }: any) => {
   return (
     <div className={`input ${className}`}>
@@ -24,6 +26,7 @@ const Input = ({
         contentEditable={editable}
         defaultValue={defaultValue}
         type={type}
+        onChange={onChange}
       />
     </div>
   );
@@ -32,12 +35,17 @@ const Input = ({
 export default function EventDetails() {
   const [data, setData] = useState<any>({});
   const { getContractDetails, buyTicket } = useContract();
-  const [vipQty, setVipQty] = useState<number>(0);
-  const [regulerQty, setRegulerQty] = useState<number>(1);
+
+  const [tickets, setTickets] = useState<string[]>([]);
+  const [ticketQtys, setTicketQtys] = useState<number[]>([]);
 
   useEffect(() => {
     getContractDetails()
-      .then(setData)
+      .then((response: any) => {
+        setTickets(response.sales?.[2]);
+        setTicketQtys([...new Array(response.sales?.[2].length)].map((_) => 0));
+        setData(response);
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -73,39 +81,49 @@ export default function EventDetails() {
             </div>
           </div>
           <div className="container px-md-5 text-white d-flex flex-column justify-content-center align-items-center">
-            {/* <div>
-              <h2>Event Organizer Details</h2>
-              <p>Lorem Ipsum</p>
-            </div> */}
-            <div className="d-flex align-items-center my-2">
-              <p className="mb-0 mx-5">Regular</p>
-              <Input
-                type="number"
-                min={0}
-                style={{ width: 100 }}
-                className="mx-5"
-                defaultValue={1}
-                value={regulerQty}
-                onChange={(e: any) => setRegulerQty(+e.target.value)}
-              />
-              {/* <button className="button">Buy Ticket</button> */}
+            <div>
+              <h2>{data.sales?.[0] || ""}</h2>
             </div>
-            <div className="d-flex align-items-center my-2">
-              <p className="mb-0 mx-5">VIP</p>
-              <Input
-                type="number"
-                min={0}
-                style={{ width: 100 }}
-                className="mx-5"
-                value={vipQty}
-                defaultValue={0}
-                onChange={(e: any) => setVipQty(+e.target.value)}
-              />
-            </div>
+            <>
+              {[...new Array(data.days || 0)]?.map((_, i) => {
+                return (
+                  <Accordion key={i + 1} title={`Day #${i + 1}`}>
+                    {data.sales?.[2]?.map((item: string, j: number) => {
+                      return (
+                        <div
+                          key={`Chilld-${i}`}
+                          className="d-flex align-items-center my-2"
+                        >
+                          <p className="mb-0 mx-5">{item}</p>
+                          <Input
+                            type="number"
+                            style={{ width: 100 }}
+                            className="mx-5"
+                            defaultValue={ticketQtys[j]}
+                            value={ticketQtys[j]}
+                            onChange={(e: any) => {
+                              const cloned = [...ticketQtys];
+                              if (+e.target.value) {
+                                cloned[j] = +e.target.value;
+                                setTicketQtys(cloned);
+                              } else if (e.target.value == "") {
+                                cloned[j] = 0;
+                                setTicketQtys(cloned);
+                              }
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
+                  </Accordion>
+                );
+              })}
+            </>
             <button
               className="button m-5"
+              disabled={!data.days}
               onClick={() => {
-                buyTicket(vipQty, regulerQty);
+                buyTicket(tickets, ticketQtys);
               }}
             >
               Buy Ticket
